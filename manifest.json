@@ -1,0 +1,19 @@
+{
+  "required_api_version": "2",
+  "name": "Perplexity AI Search",
+  "description": "Search using Perplexity AI",
+  "developer_name": "Igor Varyvoda",
+  "icon": "images/icon.png",
+  "options": {
+    "query_debounce": 0.1
+  },
+  "preferences": [
+    {
+      "id": "perplexity_kw",
+      "type": "keyword",
+      "name": "Perplexity",
+      "description": "Perplexity AI search",
+      "default_value": "px"
+    }
+  ]
+}
