@@ -13,7 +13,7 @@ This Ulauncher extension allows you to quickly search Perplexity AI directly fro
 2. Go to "Extensions" tab
 3. Click "Add extension"
 4. Paste the following URL:
-   `https://github.com/igorvaryvoda/ulauncher-perplexity-search`
+   `https://github.com/IgorVaryvoda/ulauncher-perplexity`
 
 ## Usage
 
