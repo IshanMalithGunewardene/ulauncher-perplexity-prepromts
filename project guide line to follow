@@ -1,0 +1,20 @@
+this preprompts extention allows user to enter prompt to perplexity without openig browser
+
+i want modified this extention like this
+new features
+
+1.use need to able use premade prompts + new promts 
+ how it works:
+that inside project folder need to add new folder name prepromts/ and add custom prompts custom promts are can call through ulauncher input fild like using triger word
+
+work flow example
+
+user enter this propmt in ulauncher inputfild like this "px doc react useStates" 
+px : mean extention call keyword for uluncher
+doc : mean premade prompt that inside of prepormts/ floder
+react useStates : means user enterd new prompt that must combine with premade promt
+
+premade prompt + custom prmot combine example look like
+(you need only use refernce of devdoc and offical programing language defualt doc and give me explanation using only those and here my concept to i need learn : react useStates)
+
+when user enter the "px doc react useStates" it directed to perplexity and auto enter the combine prompt to perplexity.
