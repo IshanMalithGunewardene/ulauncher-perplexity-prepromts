@@ -14,6 +14,13 @@
       "name": "Perplexity",
       "description": "Perplexity AI search",
       "default_value": "px"
+    },
+    {
+      "id": "preprompts_location",
+      "type": "input",
+      "name": "Preprompts Folder Location",
+      "description": "Path to folder containing custom preprompts",
+      "default_value": "/home/ishan/.local/share/ulauncher/extensions/com.github.ishanmalithgunewardene.ulauncher-perplexity-prepromts/prepromts"
     }
   ]
 }

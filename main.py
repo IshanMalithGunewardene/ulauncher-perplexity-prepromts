@@ -31,9 +31,14 @@ class KeywordQueryEventListener(EventListener):
         preprompt_keyword = query_parts[0] if query_parts else ""
         user_query = query_parts[1] if len(query_parts) > 1 else ""
         
-        # Get the path to preprompts folder
-        extension_dir = os.path.dirname(os.path.abspath(__file__))
-        preprompts_dir = os.path.join(extension_dir, 'prepromts')
+        # Get the path to preprompts folder from preferences
+        preprompts_dir = extension.preferences.get('preprompts_location')
+        
+        # Fallback to default location if not set
+        if not preprompts_dir:
+            extension_dir = os.path.dirname(os.path.abspath(__file__))
+            preprompts_dir = os.path.join(extension_dir, 'prepromts')
+        
         preprompt_file = os.path.join(preprompts_dir, preprompt_keyword)
         
         # Check if preprompt file exists
