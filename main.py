@@ -5,6 +5,7 @@ from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.OpenUrlAction import OpenUrlAction
+from ulauncher.api.shared.action.SetUserQueryAction import SetUserQueryAction
 
 class PerplexitySearchExtension(Extension):
     def __init__(self):
@@ -14,22 +15,7 @@ class PerplexitySearchExtension(Extension):
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         query = event.get_argument()
-        if query is None:
-            return RenderResultListAction([
-                ExtensionResultItem(
-                    icon='images/icon.png',
-                    name='Search Perplexity AI',
-                    description='Type your query after the keyword',
-                    on_enter=OpenUrlAction("https://www.perplexity.ai/")
-                )
-            ])
-
-        items = []
-        
-        # Check if the query starts with a preprompt keyword
-        query_parts = query.split(maxsplit=1)
-        preprompt_keyword = query_parts[0] if query_parts else ""
-        user_query = query_parts[1] if len(query_parts) > 1 else ""
+        keyword = extension.preferences.get('perplexity_kw') or 'px'
         
         # Get the path to preprompts folder from preferences
         preprompts_dir = extension.preferences.get('preprompts_location')
@@ -38,6 +24,55 @@ class KeywordQueryEventListener(EventListener):
         if not preprompts_dir:
             extension_dir = os.path.dirname(os.path.abspath(__file__))
             preprompts_dir = os.path.join(extension_dir, 'prepromts')
+        
+        if query is None or query.strip() == "":
+            # Show list of available preprompts
+            items = []
+            
+            if os.path.isdir(preprompts_dir):
+                try:
+                    preprompt_files = [f for f in os.listdir(preprompts_dir) 
+                                      if os.path.isfile(os.path.join(preprompts_dir, f)) 
+                                      and not f.startswith('.')]
+                    
+                    if preprompt_files:
+                        for preprompt in sorted(preprompt_files):
+                            items.append(ExtensionResultItem(
+                                icon='images/icon.png',
+                                name=preprompt,
+                                description=f'Select to use "{preprompt}" preprompt',
+                                on_enter=SetUserQueryAction(f"{keyword} {preprompt} ")
+                            ))
+                    else:
+                        items.append(ExtensionResultItem(
+                            icon='images/icon.png',
+                            name='No preprompts found',
+                            description=f'Add preprompt files to {preprompts_dir}',
+                            on_enter=OpenUrlAction("https://www.perplexity.ai/")
+                        ))
+                except Exception as e:
+                    items.append(ExtensionResultItem(
+                        icon='images/icon.png',
+                        name='Error loading preprompts',
+                        description=str(e),
+                        on_enter=OpenUrlAction("https://www.perplexity.ai/")
+                    ))
+            else:
+                items.append(ExtensionResultItem(
+                    icon='images/icon.png',
+                    name='Preprompts folder not found',
+                    description=f'Create folder at {preprompts_dir}',
+                    on_enter=OpenUrlAction("https://www.perplexity.ai/")
+                ))
+            
+            return RenderResultListAction(items)
+
+        items = []
+        
+        # Check if the query starts with a preprompt keyword
+        query_parts = query.split(maxsplit=1)
+        preprompt_keyword = query_parts[0] if query_parts else ""
+        user_query = query_parts[1] if len(query_parts) > 1 else ""
         
         preprompt_file = os.path.join(preprompts_dir, preprompt_keyword)
         
